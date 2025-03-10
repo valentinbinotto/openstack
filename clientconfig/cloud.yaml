@@ -1,0 +1,13 @@
+# Place this file in /home/$USER/.config/openstack/clouds.yaml
+
+clouds:
+  CLOUD0001:
+    auth:
+      auth_url: https://api.openstack.cloudopn.com/identity/v3
+      project_name: PR-XYZ
+      username: vale
+      password: xyz
+      user_domain_name: default
+      project_domain_name: default
+    region_name: us-east-1a
+    identity_api_version: 3
