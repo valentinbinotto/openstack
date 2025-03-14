@@ -1,3 +1,6 @@
+# Varsfile
+# Consider using "openssl rand -hex [NUMBER]" to generate secrets
+
 # Projects and Domains
 OPENSTACK_PROJECT01=""
 OPENSTACK_DOMAIN01=""
