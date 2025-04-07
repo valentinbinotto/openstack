@@ -1,20 +1,97 @@
-heat_template_version: 2015-04-30
+heat_template_version: 2021-04-16
+
+description: Basic template
 
 parameters:
   key_name:
     type: string
-    label: KeyName
+    label: Key Name
+    description: Name of key-pair for compute instance
+    hidden: true
   image_id:
     type: string
-    label: ImageID
-  instance_type:
+    label: Image ID
+    description: Id of Image for Server instance
+    default: debian-001
+    constraints:
+      - allowed_values: [ debian-001, ubuntu-001 ]
+        description: Value must be one of debian-001 or ubuntu-001
+      - length: { min: 6, max: 16 }
+      - allowed_pattern: "[A-Z]+[a-zA-Z0-9]"
+        description: Must start with uppercase character
+  usernameserver002:
     type: string
-    label: InstanceType
+    label: Name for User of Server 002
+    default: valentin
 
 resources:
-  instance0001:
+  nova_instance_001:
     type: OS::Nova::Server
     properties:
       key_name: { get_param: key_name }
       image: { get_param: image_id }
-      flavor: { get_param: instance_type }
+      flavor: m1.small
+      user_data: |
+        #!/bin/bash
+        echo "Hello Valentin"
+      
+  nova_instance_002:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: key_name }
+      image: { get_param: image_id }
+      flavor: m1.small
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            echo "Hello $USERNAMEEXT"
+          params:
+            $USERNAMEEXT: {get_param: usernameserver002}
+
+  <resource ID>:
+    type: <resource type>
+    properties:
+      <property name>: <property value>
+    metadata:
+      <resource specific metadata>
+    depends_on: <resource ID or list of IDs>
+    update_policy: <update_policy>
+    deletion_policy: <deletion policy>
+    external_id: <external resource ID>
+    condition: <condition name or expression or boolean>
+    
+  key_001:
+    type: OS::Nova::KeyPair
+    properties:
+      save_private_key: true
+      name: { get_param: key_name }
+      
+  network_001:
+    type: OS::Neutron::Net
+    
+  subnet_001:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: network_001 }
+      cidr: "172.16.1.0/24"
+      dns_nameservers: [ "1.1.1.1", "1.1.1.0" ]
+      ip_version: 4
+      
+  router_001:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: { network: public }
+      
+  router_interface_001:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router_001 }
+      subnet: { get_resource: subnet_001 }
+      
+outputs:
+  instance_ip:
+    description: IP of deployed instance
+    value: { get_attr: [nova_instance_001, first_address] }
+  private_key_001:
+    value: { get_attr: [ key_001, private_key ] }
