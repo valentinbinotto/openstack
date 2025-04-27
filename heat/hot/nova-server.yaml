@@ -95,3 +95,52 @@ outputs:
     value: { get_attr: [nova_instance_001, first_address] }
   private_key_001:
     value: { get_attr: [ key_001, private_key ] }
+
+
+
+
+
+
+heat_template_version: 2021-04-16
+
+description: "Server Setup"
+
+parameters:
+  server_0001_name:
+    type: string
+    label: "Server 0001 Name"
+    description: "Name of Server 0001"
+    default: "sr0001.network-0001.os-cloud-0001.vty-valentin-vty.net"
+  server_0001_name_adminpass:
+    type: string
+    label: "Server 0001 Admin Password"
+    description: "Admin Password of Server 0001"
+    hidden: true
+
+resources:
+  server_0001:
+    type: OS::Nova::Server
+    properties:
+      flavor:
+      admin_pass: { get_param: server_0001_name_adminpass }
+      availability_zone:
+      block_device_mapping_v2:
+        delete_on_termination: false
+        device_name:
+        volume_size:
+        boot_index:
+      image:
+      key_name:
+      name: { get_param: server_0001_name }
+      networks:
+        fixed_ip:
+        floating_ip:
+        network:
+        port_extra_properties:
+          admin_state_up:
+          mac_address:
+        subnet:
+      security_groups:
+      user_data:
+      user_data_format:
+  

@@ -1,0 +1,8 @@
+
+
+  s3_container_0001:
+    type: OS::Swift::Container
+    properties:
+      name: "s3-kgess-enpcon-0001"
+      "X-Container-Meta":
+        Domain: "s3-kgess-enpcon-0001"
