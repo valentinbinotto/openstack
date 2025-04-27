@@ -1,1 +1,144 @@
+heat_template_version: 2021-04-16
 
+description: "Networking Setup"
+
+parameters:
+  network_0001_name:
+    type: string
+    label: "Network 0001 Name"
+    description: "Name of Network 0001"
+    default: "network-0001.os-cloud-0001.vty-valentin-vty.net"
+  network_0001_dns:
+    type: string
+    label: "Network 0001 DNS Name"
+    description: "DNS Name of Network 0001"
+    default: "network-0001.os-cloud-0001.vty-valentin-vty.net"
+  network_0001_subnet_0001_name:
+    type: string
+    label: "Subnet 0001 of Network 0001 Name"
+    description: "Name of Subnet 0001 in Network 0001"
+    default: "sn0001.network-0001.os-cloud-0001.vty-valentin-vty.net"
+  network_0001_subnet_0001_cidr:
+    type: string
+    label: "Subnet 0001 of Network 0001 CIDR (IPv4)""
+    description: "IPv4 CIDR of Subnet 0001 in Network 0001"
+    default: ""
+
+resources:
+  network_0001:
+    type: OS::Neutron::Net
+    properties:
+      admin_state_up: true
+      name: { get_param: network_0001_name }
+      dns_domain: { get_param: network_0001_dns }
+      
+  network_0001_subnet_0001:
+    type: OS::Neutron::Subnet
+    properties:
+      host_routes:
+        - destination: "0.0.0.0/0"
+          nexthop: ""
+      dns_nameservers:
+        - "1.1.1.1"
+      name: { get_param: network_0001_subnet_0001_name }
+      network: { get_resource: network_0001 }
+      ip_version: 4
+      cidr: { get_param: network_0001_subnet_0001_cidr }
+      enable_dhcp: true
+      gateway_ip: ""
+      
+  network_0001_subnet_0002:
+    type: OS::Neutron::Subnet
+    properties:
+      host_routes:
+        - destination: "0.0.0.0/0"
+          nexthop: ""
+      dns_nameservers:
+        - "1.1.1.1"
+      name: { get_param: network_0001_subnet_0002_name }
+      network: { get_resource: network_0001 }
+      ip_version: 4
+      cidr: { get_param: network_0001_subnet_0002_cidr }
+      enable_dhcp: true
+      gateway_ip: ""
+
+  network_0001_subnet_0003:
+    type: OS::Neutron::Subnet
+    properties:
+      host_routes:
+        - destination: "0.0.0.0/0"
+          nexthop: ""
+      dns_nameservers:
+        - "1.1.1.1"
+      name: { get_param: network_0001_subnet_0003_name }
+      network: { get_resource: network_0001 }
+      ip_version: 4
+      cidr: { get_param: network_0001_subnet_0003_cidr }
+      enable_dhcp: true
+      gateway_ip: ""
+      
+  network_0001_router_0001:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info:
+        network:
+        enable_snat: true
+      admin_state_up: true
+      name: 
+      
+  dnszone_0001:
+    type: OS::Designate::Zone
+    properties:
+      name: "vty-valentin-vty.net."
+      email: "hostmaster@kges2.net"
+      
+  dnszone_0001_record_0001:
+    type: OS::Designate::RecordSet
+    properties:
+      zone: 
+      type: TXT
+      name: root
+    depends_on:
+      - dnszone_0001
+      
+  secgroup_0001:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        - direction: ingress
+          ethertype: IPv4
+          protocol: tcp
+          remote_mode: remote_ip_prefix
+          remote_ip_prefix: "0.0.0.0/0"
+          port_range_min: 22
+          port_range_max: 22
+        - direction: ingress
+          ethertype: IPv6
+          protocol: tcp
+          remote_mode: remote_ip_prefix
+          remote_ip_prefix: "::/0"
+          port_range_min: 22
+          port_range_max: 22
+      name:
+      description:"allow ssh via ipv6 and ipv4 from everywhere"
+      
+      
+      
+      
+      
+      
+      
+
+   
+  
+      
+  router_001:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: { network: public }
+      
+  router_interface_001:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router_001 }
+      subnet: { get_resource: subnet_001 }
