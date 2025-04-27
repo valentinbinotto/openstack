@@ -1,0 +1,9 @@
+[submodule "deployment/openstack-ansible/submodules/openstack-ansible"]
+	path = deployment/openstack-ansible/submodules/openstack-ansible
+	url = https://opendev.org/openstack/openstack-ansible.git
+[submodule "deployment/openstack-heat/submodules/heat-templates"]
+	path = deployment/openstack-heat/submodules/heat-templates
+	url = https://opendev.org/openstack/heat-templates.git
+[submodule "deployment/openstack-heat/submodules/heat-specs"]
+	path = deployment/openstack-heat/submodules/heat-specs
+	url = https://opendev.org/openstack/heat-specs.git
