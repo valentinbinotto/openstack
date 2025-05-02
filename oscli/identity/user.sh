@@ -1,0 +1,2 @@
+openstack user create --domain os-cloud-0001.vty-valentin-vty.net --password-prompt --email valentin@cloudopn.oscloud valentin
+openstack user create --domain os-cloud-0001.vty-valentin-vty.net --project pr-0001.os-cloud-0001.vty-valentin-vty.net --project-domain os-cloud-0001.vty-valentin-vty.net --password PASSWORD --email valentin@cloudopn.oscloud valentin

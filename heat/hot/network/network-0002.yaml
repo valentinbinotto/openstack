@@ -1,0 +1,17 @@
+heat_template_version: 2021-04-16
+
+description: "Neutron Network only"
+
+parameters:
+  network-0001-name:
+    type: string
+    label: "network-0001 Name"
+    default: "network-0001.os-cloud-0001.vty-valentin-vty.net"
+
+resources:
+  network-0001:
+    type: OS::Neutron::Net
+    properties:
+      admin_state_up: true
+      shared: true
+      name: { get_param: network-0001-name }

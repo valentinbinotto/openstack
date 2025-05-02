@@ -1,0 +1,33 @@
+heat_template_version: 2021-04-16
+
+description: "Provider Networking Setup"
+
+parameters:
+  provider_net_0001:
+    type: string
+    label: "ProviderNet 0001 Name"
+    description: "Name of ProviderNet 0001"
+    default: "provnet-0001.os-cloud-0001.vty-valentin-vty.net"
+  provider_net_0001_domain:
+    type: string
+    label: "ProviderNet 0001 Domain"
+    description: "Domain of ProviderNet 0001"
+    default: "provnet-0001.os-cloud-0001.vty-valentin-vty.net"
+  provider_net_0001_phypro:
+    type: string
+    label: "ProviderNet 0001 Physical network name"
+    default: "br-provider"
+
+resources:
+  provider_net_0001:
+    type: OS::Neutron::ProviderNet
+    properties:
+      network_type: flat
+      admin_state_up: true
+      dns_domain: { get_param: provider_net_0001_domain }
+      name: { get_param: provider_net_0001 }
+      shared: true
+      physical_network: { get_param: provider_net_0001_phypro }
+      
+# network_type can be "flat", "local", "vlan", "vxlan", "gre", "geneve"
+      

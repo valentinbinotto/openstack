@@ -1,0 +1,16 @@
+heat_template_version: 2021-04-16
+
+description: "Identity Domain only"
+
+parameters:
+  domain-0001-name:
+    type: string
+    label: "domain-0001 Name"
+    default: "os-cloud-0001.vty-valentin-vty.net"
+
+resources:
+  domain-0001:
+    type: OS::Keystone::Domain
+    properties:
+      enabled: true
+      name: { get_param: domain-0001-name }

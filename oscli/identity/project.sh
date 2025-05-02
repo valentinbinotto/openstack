@@ -1,0 +1,1 @@
+openstack project create --domain os-cloud-0001.vty-valentin-vty.net pr-0001.os-cloud-0001.vty-valentin-vty.net

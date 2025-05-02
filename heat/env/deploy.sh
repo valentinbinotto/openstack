@@ -1,0 +1,1 @@
+openstack stack create stack_name_001 --parameter "varkey=varvalue" -t basic-template.yaml

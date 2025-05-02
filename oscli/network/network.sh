@@ -1,0 +1,1 @@
+openstack network create --share --project XYZ --project-domain default.internal --internal network-0001.os-cloud-0001.vty-valentin-vty.net
