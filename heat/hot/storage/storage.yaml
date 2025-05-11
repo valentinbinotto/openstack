@@ -1,8 +1,25 @@
+heat_template_version: 2021-04-16
 
+description: "S3 Bucket and Policy"
 
-  s3_container_0001:
+parameters:
+  s3-container-0001-name:
+    type: string
+    label: "s3-container-0001 Name"
+    default: "s3-0001.pr-0001.os-cloud-0001"
+  s3-container-0001-read-role-001:
+    type: string
+    label: "s3-container-0001 Name of Read-Role"
+    default: "rl-0001-s3-read-0001"
+  s3-container-0001-write-role-001:
+    type: string
+    label: "s3-container-0001 Name of Write-Role"
+    default: "rl-0001-s3-write-0001"
+
+resources:
+  s3-container-0001:
     type: OS::Swift::Container
     properties:
-      name: "s3-kgess-enpcon-0001"
-      "X-Container-Meta":
-        Domain: "s3-kgess-enpcon-0001"
+      name: { get_param: s3-container-0001-name }
+      X-Container-Read: { get_param: s3-container-0001-read-role-001 }
+      X-Container-Write: { get_param: s3-container-0001-write-role-001 }
